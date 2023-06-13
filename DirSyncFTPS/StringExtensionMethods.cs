@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 using System.Security.Cryptography;
 using GlitchedPolygons.ExtensionMethods;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 /// <summary>
 /// Extension methods for <see cref="System.String"/>s.

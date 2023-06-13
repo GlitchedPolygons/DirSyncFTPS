@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -16,21 +16,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace DirSyncSFTP;
+using System.Windows;
 
-public class SynchronizedDirectory
+namespace DirSyncFTPS
 {
-    public string LocalDirectory { get; set; } = string.Empty;
-    public string RemoteDirectory { get; set; } = string.Empty;
-    public string SshKeyFilePath { get; set; } = string.Empty;
-    public string SshKeyPassphrase { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string Host { get; set; } = string.Empty;
-    public ushort Port { get; set; } = 22;
-
-    public string GetDictionaryKey()
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
     {
-        return $"{LocalDirectory}:{RemoteDirectory}";
     }
 }

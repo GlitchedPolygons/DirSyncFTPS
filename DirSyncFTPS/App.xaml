@@ -1,6 +1,6 @@
-﻿/*
-    DirSyncSFTP
-    Copyright (C) 2023  Raphael Beck
+﻿<!--
+    DirSyncFTPS
+    Copyright (C) 2023 Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,16 +14,14 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+-->
 
-using System.Windows;
-
-namespace DirSyncSFTP
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
-}
+<Application x:Class="DirSyncFTPS.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DirSyncFTPS"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

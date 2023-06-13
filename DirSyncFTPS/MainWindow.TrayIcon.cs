@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -17,19 +17,25 @@
 */
 
 using System;
-using System.Windows;
+using System.Threading.Tasks;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public partial class MainWindow
 {
-    private void SliderSyncIntervalMinutes_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    private void TrayContextMenu_OnClickedQuit(object? sender, EventArgs e)
     {
-        int minutes = Math.Clamp((int)SliderSyncIntervalMinutes.Value, 1, 60);
+        Quit();
+        Environment.Exit(0);
+    }
 
-        SliderSyncIntervalMinutes.Value = minutes;
-        LabelSyncFrequencySlider.Content = $"Synchronization frequency: every {(minutes == 1 ? "minute" : $"{minutes} minutes")}";
+    private void TrayContextMenu_OnClickedForceSyncNow(object? sender, EventArgs e)
+    {
+        Task.Run(PerformSync);
+    }
 
-        jsonPrefs?.SetInt(Constants.PrefKeys.SYNC_INTERVAL_MINUTES, minutes);
+    private void TrayContextMenu_OnClickedOpen(object? sender, EventArgs e)
+    {
+        Open();
     }
 }

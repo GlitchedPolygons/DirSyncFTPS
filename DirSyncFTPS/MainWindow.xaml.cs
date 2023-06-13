@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ using MessageBox = System.Windows.MessageBox;
 using Application = System.Windows.Application;
 using System.Windows.Documents;
 
-namespace DirSyncSFTP
+namespace DirSyncFTPS
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -69,11 +69,11 @@ namespace DirSyncSFTP
 
             assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
-            mutex = new Mutex(true, nameof(DirSyncSFTP), out bool newInstance);
+            mutex = new Mutex(true, nameof(DirSyncFTPS), out bool newInstance);
 
             if (!newInstance)
             {
-                MessageBox.Show("There is already an instance of DirSyncSFTP.exe running... or crawling ;D");
+                MessageBox.Show("There is already an instance of DirSyncFTPS.exe running... or crawling ;D");
                 Application.Current.Shutdown();
             }
 
@@ -86,7 +86,7 @@ namespace DirSyncSFTP
 
                     if (jsonPrefs?.GetBool(Constants.PrefKeys.TRAY_BALLOON_SHOWN) is false)
                     {
-                        notifyIcon?.ShowBalloonTip(1024, "It's still running", "If you want to quit DirSyncSFTP, you can do so by right-clicking on its taskbar tray icon.", ToolTipIcon.Info);
+                        notifyIcon?.ShowBalloonTip(1024, "It's still running", "If you want to quit DirSyncFTPS, you can do so by right-clicking on its taskbar tray icon.", ToolTipIcon.Info);
                         jsonPrefs?.SetBool(Constants.PrefKeys.TRAY_BALLOON_SHOWN, true);
                     }
                 }
@@ -227,7 +227,7 @@ namespace DirSyncSFTP
             {
                 Visible = true,
                 Text = Constants.TRAY_TOOLTIP_IDLE,
-                Icon = new System.Drawing.Icon(Path.Combine(assemblyLocation, "sftp.ico")),
+                Icon = new System.Drawing.Icon(Path.Combine(assemblyLocation, "ftps.ico")),
                 ContextMenuStrip = new ContextMenuStrip
                 {
                     Items =

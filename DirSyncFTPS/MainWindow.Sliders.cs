@@ -1,6 +1,6 @@
-﻿<!--
-    DirSyncSFTP
-    Copyright (C) 2023 Raphael Beck
+﻿/*
+    DirSyncFTPS
+    Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,14 +14,22 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
+*/
 
-<Application x:Class="DirSyncSFTP.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DirSyncSFTP"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
-</Application>
+using System;
+using System.Windows;
+
+namespace DirSyncFTPS;
+
+public partial class MainWindow
+{
+    private void SliderSyncIntervalMinutes_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        int minutes = Math.Clamp((int)SliderSyncIntervalMinutes.Value, 1, 60);
+
+        SliderSyncIntervalMinutes.Value = minutes;
+        LabelSyncFrequencySlider.Content = $"Synchronization frequency: every {(minutes == 1 ? "minute" : $"{minutes} minutes")}";
+
+        jsonPrefs?.SetInt(Constants.PrefKeys.SYNC_INTERVAL_MINUTES, minutes);
+    }
+}

@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GlitchedPolygons.ExtensionMethods;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public partial class MainWindow
 {
@@ -94,7 +94,7 @@ public partial class MainWindow
 
             if (!knownHosts.Dictionary.TryGetValue(host, out string? storedFingerprint))
             {
-                AppendLineToConsoleOutputTextBox($"ERROR: Key fingerprint for host \"{host}\" not found in local cache!");
+                AppendLineToConsoleOutputTextBox($"ERROR: TLS Certificate fingerprint for host \"{host}\" not found in local cache!");
                 return;
             }
 
@@ -102,7 +102,7 @@ public partial class MainWindow
 
             if (storedFingerprint != fingerprint)
             {
-                AppendLineToConsoleOutputTextBox($"ERROR: The host key fingerprint for \"{host}\" (DirSync: \"{synchronizedDirectory.GetDictionaryKey()}\" - fingerprint: \"{fingerprint}\") does not match the locally stored one to which you agreed during setup of the synchronized directory: \"{storedFingerprint}\". The host either changed its key or, well... Let's hope it's not a MITM attack!");
+                AppendLineToConsoleOutputTextBox($"ERROR: The host TLS certificate fingerprint for \"{host}\" (DirSync: \"{synchronizedDirectory.GetDictionaryKey()}\" - fingerprint: \"{fingerprint}\") does not match the locally stored one to which you agreed during setup of the synchronized directory: \"{storedFingerprint}\". The host either changed/renewed its TLS certificate or, well... Let's hope it's not a MITM attack!");
                 return;
             }
 
@@ -134,24 +134,20 @@ public partial class MainWindow
 
             argsStringBuilder.Append("' -listPath '");
             argsStringBuilder.Append(Path.Combine(filesListDir, synchronizedDirectory.GetDictionaryKey().SHA256()).UTF8GetBytes().ToBase64String());
+            argsStringBuilder.Append("' ");
 
             if (synchronizedDirectory.Password.NotNullNotEmpty())
             {
-                argsStringBuilder.Append("' -password '");
+                argsStringBuilder.Append("-password '");
                 argsStringBuilder.Append(synchronizedDirectory.Password.UTF8GetBytes().ToBase64String());
+                argsStringBuilder.Append("' ");
             }
-
-            if (synchronizedDirectory.SshKeyFilePath.NotNullNotEmpty())
+            
+            if (synchronizedDirectory.FtpsModeImplicit != 0)
             {
-                argsStringBuilder.Append("' -sshKey '");
-                argsStringBuilder.Append(synchronizedDirectory.SshKeyFilePath.UTF8GetBytes().ToBase64String());
-
-                argsStringBuilder.Append("' -sshKeyPassphrase '");
-                argsStringBuilder.Append(synchronizedDirectory.SshKeyPassphrase.UTF8GetBytes().ToBase64String());
+                argsStringBuilder.Append("-ftpsModeImplicit '1' ");
             }
-
-            argsStringBuilder.Append("' ");
-
+            
             string args = argsStringBuilder.ToString();
             string argsHash = args.SHA256();
 
@@ -210,13 +206,13 @@ public partial class MainWindow
             if (nowSynchronizing)
             {
                 synchronizing = true;
-                Title = "SFTP Directory Synchronizer (currently synchronizing...)";
+                Title = "FTPS Directory Synchronizer (currently synchronizing...)";
                 notifyIcon.Text = Constants.TRAY_TOOLTIP_SYNCING;
             }
             else
             {
                 synchronizing = false;
-                Title = "SFTP Directory Synchronizer";
+                Title = "FTPS Directory Synchronizer";
                 notifyIcon.Text = Constants.TRAY_TOOLTIP_IDLE;
             }
         });

@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public static class Constants
 {
@@ -38,15 +38,15 @@ public static class Constants
     }
 
     public const long MAX_LOG_FILE_SIZE_BYTES = 1024 * 1024 * 16;
-    
+
     public const string LOG_FILENAME = "Log.txt";
     public const string CONFIG_FILENAME = "Config.json";
     public const string KNOWN_HOSTS_FILENAME = "KnownHosts.json";
     public const string POWERSHELL_SYNC_SCRIPT_FILENAME = "Sync.ps1";
     public const string POWERSHELL_SCAN_HOST_KEY_FP_SCRIPT_FILENAME = "ScanHostKeyFingerprint.ps1";
     public const string FILE_LISTS_DIRECTORY = "SynchronizedDirectories";
-    public const string TRAY_TOOLTIP_IDLE = "DirSyncSFTP\nDouble-click to open\nRight-click to show context menu";
-    public const string TRAY_TOOLTIP_SYNCING = "DirSyncSFTP (synchronizing)\nDouble-click to open\nRight-click to show context menu";
+    public const string TRAY_TOOLTIP_IDLE = "DirSyncFTPS\nDouble-click to open\nRight-click to show context menu";
+    public const string TRAY_TOOLTIP_SYNCING = "DirSyncFTPS (synchronizing)\nDouble-click to open\nRight-click to show context menu";
 
     public const string POWERSHELL_SCAN_HOST_KEY_FP_SCRIPT = @"
 param (
@@ -54,7 +54,7 @@ param (
     [string] $assemblyPath = ""C:\Program Files (x86)\WinSCP\WinSCPnet.dll"",
 
     [Parameter(Mandatory = $True)]
-    [string] $hostName = ""sftp.example.com"",
+    [string] $hostName = ""ftps.example.com"",
 
     [Parameter(Mandatory = $True)]
     [int] $portNumber = 22
@@ -65,7 +65,8 @@ try
     Add-Type -Path $assemblyPath
  
     $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
-        Protocol = [WinSCP.Protocol]::Sftp
+        Protocol = [WinSCP.Protocol]::Ftp
+        FtpSecure = [WinSCP.FtpSecure]::Explicit
         HostName = $hostName
         PortNumber = $portNumber
     }
@@ -118,14 +119,11 @@ param (
     [Parameter(Mandatory = $True)]
     [string] $username,
 
-    [Parameter(Mandatory = $False)]
+    [Parameter(Mandatory = $True)]
     [string] $password,
 
     [Parameter(Mandatory = $False)]
-    [string] $sshKey,
-
-    [Parameter(Mandatory = $False)]
-    [string] $sshKeyPassphrase,
+    [int] $ftpsModeImplicit = 0,
 
     [Parameter(Mandatory = $False)]
     [string] $sessionLogPath = $Null
@@ -141,31 +139,20 @@ try
     $fingerprint = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($fingerprint))
     $username = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($username))
     $password = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($password))
-    $sshKey = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($sshKey))
-    $sshKeyPassphrase = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($sshKeyPassphrase))
 
     $sessionOptions = New-Object WinSCP.SessionOptions
-    $sessionOptions.Protocol = [WinSCP.Protocol]::Sftp
+    $sessionOptions.Protocol = [WinSCP.Protocol]::Ftp
+    $sessionOptions.FtpSecure = [WinSCP.FtpSecure]::Explicit
     $sessionOptions.HostName = $hostName
     $sessionOptions.PortNumber = $portNumber
     $sessionOptions.UserName = $username
+    $sessionOptions.Password = $password
+    $sessionOptions.TlsHostCertificateFingerprint = $fingerprint
 
-    if ($password)
+    if ($ftpsModeImplicit -eq 1)
     {
-        $sessionOptions.Password = $password 
+        $sessionOptions.FtpSecure = [WinSCP.FtpSecure]::Implicit
     }
-
-    if ($sshKey)
-    {
-        $sessionOptions.SshPrivateKeyPath = $sshKey 
-    }
-
-    if ($sshKey)
-    {
-        $sessionOptions.PrivateKeyPassphrase = $sshKeyPassphrase 
-    }
-    
-    $sessionOptions.SshHostKeyFingerprint = $fingerprint
  
     $listPath = [Environment]::ExpandEnvironmentVariables($listPath)
     $listDir = (Split-Path -Parent $listPath) 

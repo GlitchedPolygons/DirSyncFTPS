@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Xml;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 using System;
 using System.IO;

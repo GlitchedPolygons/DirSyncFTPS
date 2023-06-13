@@ -1,5 +1,5 @@
 ﻿<!--
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023 Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
 -->
 
 <Window
-    x:Class="DirSyncSFTP.MainWindow"
+    x:Class="DirSyncFTPS.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:local="clr-namespace:DirSyncSFTP"
+    xmlns:local="clr-namespace:DirSyncFTPS"
     mc:Ignorable="d"
-    Title="SFTP Directory Synchronizer"
+    Title="FTPS Directory Synchronizer"
     MinHeight="512"
     Height="512"
     MinWidth="512"
@@ -93,7 +93,7 @@
                 x:Name="CheckBoxMinimizeOnClose"
                 Checked="CheckBoxMinimizeOnClose_OnChecked"
                 Unchecked="CheckBoxMinimizeOnClose_OnChecked"
-                ToolTip="When this is checked, closing this window will not terminate DirSyncSFTP but minimize it to the taskbar tray instead."
+                ToolTip="When this is checked, closing this window will not terminate DirSyncFTPS but minimize it to the taskbar tray instead."
                 IsChecked="True">
                 Minimize to tray on close
             </CheckBox>
@@ -103,7 +103,7 @@
                 Checked="CheckBoxAutostart_OnChecked"
                 Unchecked="CheckBoxAutostart_OnChecked"
                 Margin="8 0 0  0"
-                ToolTip="Should DirSyncSFTP be launched after booting?"
+                ToolTip="Should DirSyncFTPS be launched after booting?"
                 IsChecked="True">
                 Autostart
             </CheckBox>
@@ -113,7 +113,7 @@
                 Margin="8 0 0  0"
                 Checked="CheckBoxStartMinimized_OnChecked"
                 Unchecked="CheckBoxStartMinimized_OnChecked"
-                ToolTip="Should DirSyncSFTP directly be minimized after starting?"
+                ToolTip="Should DirSyncFTPS directly be minimized after starting?"
                 IsChecked="False">
                 Start minimized
             </CheckBox>

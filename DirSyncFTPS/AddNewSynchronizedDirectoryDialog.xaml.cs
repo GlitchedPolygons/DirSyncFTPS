@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ using System.Windows.Controls;
 using GlitchedPolygons.ExtensionMethods;
 using Microsoft.Win32;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public partial class AddNewSynchronizedDirectoryDialog : Window
 {
@@ -42,7 +42,7 @@ public partial class AddNewSynchronizedDirectoryDialog : Window
         Regex regex = new Regex("[^0-9]+");
         e.Handled = regex.IsMatch(e.Text);
     }
-    
+
     private void TextBox_OnGotFocus(object sender, RoutedEventArgs e)
     {
         (sender as TextBox)?.SelectAll();
@@ -98,24 +98,20 @@ public partial class AddNewSynchronizedDirectoryDialog : Window
         PasswordBoxPassword.Password = string.Empty;
     }
 
-    private void ButtonSelectSshKeyFile_OnClick(object sender, RoutedEventArgs e)
+    private void RadioButtonExplicitFTPSMode_OnChecked(object sender, RoutedEventArgs e)
     {
-        OpenFileDialog openFileDialog = new()
-        {
-            Multiselect = false,
-            DefaultExt = ".ppk",
-            Title = "Select SSH key to use for auth",
-            Filter = "PuTTY key file|*.ppk",
-        };
+        SynchronizedDirectory.FtpsModeImplicit = 0;
 
-        TextBoxSshKeyFile.Text = openFileDialog.ShowDialog() is true
-            ? openFileDialog.FileName
-            : string.Empty;
+        if (RadioButtonImplicitFTPSMode is not null)
+            RadioButtonImplicitFTPSMode.IsChecked = false;
     }
 
-    private void ButtonClearSshKeyPassphraseField_OnClick(object sender, RoutedEventArgs e)
+    private void RadioButtonImplicitFTPSMode_OnChecked(object sender, RoutedEventArgs e)
     {
-        PasswordBoxSshKeyPassphrase.Password = string.Empty;
+        SynchronizedDirectory.FtpsModeImplicit = 1;
+
+        if (RadioButtonExplicitFTPSMode is not null)
+            RadioButtonExplicitFTPSMode.IsChecked = false;
     }
 
     private void ButtonCancel_OnClick(object sender, RoutedEventArgs e)
@@ -135,13 +131,9 @@ public partial class AddNewSynchronizedDirectoryDialog : Window
         SynchronizedDirectory.LocalDirectory = TextBoxLocalDirectory.Text.ToLowerInvariant();
         SynchronizedDirectory.RemoteDirectory = TextBoxRemoteDirectory.Text;
 
-        SynchronizedDirectory.SshKeyFilePath = File.Exists(TextBoxSshKeyFile.Text)
-            ? TextBoxSshKeyFile.Text
-            : string.Empty;
-
-        SynchronizedDirectory.SshKeyPassphrase = SynchronizedDirectory.SshKeyFilePath.NullOrEmpty()
-            ? string.Empty
-            : PasswordBoxSshKeyPassphrase.Password;
+        SynchronizedDirectory.FtpsModeImplicit = (RadioButtonImplicitFTPSMode.IsChecked is true)
+            ? (ushort)1
+            : (ushort)0;
 
         DialogResult = true;
         Close();
@@ -152,11 +144,11 @@ public partial class AddNewSynchronizedDirectoryDialog : Window
         MessageBox.Show
         (
             @"
-To synchronize an SFTP server's remote directory with a local one, please compile the form and enter the necessary credentials in order to proceed.
+To synchronize an FTPS server's remote directory with a local one, please compile the form and enter the necessary credentials in order to proceed.
 
 Synchronized directories behave kinda like Dropbox, OneDrive, etc... in that they are always kept in sync with their remote counterpart.
 
-Please keep in mind though that at the moment, DirSyncSFTP is very raw and simple: it does not handle file conflicts at all and has no ignore-list feature.
+Please keep in mind though that at the moment, DirSyncFTPS is very raw and simple: it does not handle file conflicts at all and has no ignore-list feature.
 
 It's not guaranteed that this works flawlessly. Until it's battle-tested thoroughly, ALWAYS KEEP A SEPARATE BACKUP OF YOUR DATA!
 
@@ -165,13 +157,13 @@ _________________________________________________________
 Example config:
 
 Host: 
-sftp.example.org
+ftps.example.org
 
 Port: 
 22
 
 Username: 
-mySftpUserOnTheServer
+myFTPSUserOnTheServer
 
 Password: 
 Sup3rS4fePa$$W0rd_omfgPleaseTakeCare!
@@ -180,15 +172,10 @@ Local path:
 C:\Users\MyUserProfile\SomeFolder
 
 Remote path: 
-/mnt/nas/users/mySftpUserOnTheServer/SomeFolder
+/mnt/nas/users/myFTPSUserOnTheServer/SomeFolder
 
-SSH Key: 
-<none>
-
-SSH Key passphrase: 
-<none>
 ",
-            "Detailed information about DirSyncSFTP"
+            "Detailed information about DirSyncFTPS"
         );
     }
 }

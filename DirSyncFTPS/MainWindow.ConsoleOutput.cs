@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ using GlitchedPolygons.ExtensionMethods;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public partial class MainWindow
 {

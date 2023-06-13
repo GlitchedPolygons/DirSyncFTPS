@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public partial class MainWindow
 {

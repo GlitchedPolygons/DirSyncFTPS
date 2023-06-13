@@ -1,5 +1,5 @@
 ﻿<!--
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023 Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -17,12 +17,12 @@
 -->
 
 <Window
-    x:Class="DirSyncSFTP.AddNewSynchronizedDirectoryDialog"
+    x:Class="DirSyncFTPS.AddNewSynchronizedDirectoryDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:DirSyncSFTP"
+    xmlns:local="clr-namespace:DirSyncFTPS"
     mc:Ignorable="d"
     Title="Add new synchronized directory"
     ResizeMode="CanResize"
@@ -282,11 +282,11 @@
             </Grid>
 
             <Label
-                Content="SSH Key:"
+                Content="FTPS Mode:"
                 Margin="-4 8 0 0" />
 
             <Grid
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Left"
                 Height="25"
                 VerticalAlignment="Center">
 
@@ -300,58 +300,19 @@
 
                 </Grid.ColumnDefinitions>
 
-                <TextBox
-                    x:Name="TextBoxSshKeyFile"
-                    GotFocus="TextBox_OnGotFocus"
-                    Grid.Column="0" />
+                <RadioButton
+                    x:Name="RadioButtonExplicitFTPSMode"
+                    Checked="RadioButtonExplicitFTPSMode_OnChecked"
+                    Grid.Column="0"
+                    Content="Explicit"
+                    IsChecked="True" />
 
-                <Button
-                    Padding="8 0 8 0"
-                    Margin="-4 0 0 0"
-                    Width="64"
+                <RadioButton
+                    x:Name="RadioButtonImplicitFTPSMode"
+                    Checked="RadioButtonImplicitFTPSMode_OnChecked"
                     Grid.Column="1"
-                    TabIndex="-10"
-                    x:Name="ButtonSelectSshKeyFile"
-                    Click="ButtonSelectSshKeyFile_OnClick">
-                    Browse
-                </Button>
-
-            </Grid>
-
-            <Label
-                Content="SSH Key Passphrase:"
-                Margin="-4 8 0 0" />
-
-            <Grid
-                HorizontalAlignment="Stretch"
-                Height="25"
-                VerticalAlignment="Center">
-
-                <Grid.ColumnDefinitions>
-
-                    <ColumnDefinition
-                        Width="*" />
-
-                    <ColumnDefinition
-                        Width="auto" />
-
-                </Grid.ColumnDefinitions>
-
-                <PasswordBox
-                    x:Name="PasswordBoxSshKeyPassphrase"
-                    GotFocus="TextBox_OnGotFocus"
-                    Grid.Column="0" />
-
-                <Button
-                    Padding="8 0 8 0"
-                    Margin="-4 0 0 0"
-                    Width="64"
-                    Grid.Column="1"
-                    TabIndex="-10"
-                    x:Name="ButtonClearSshKeyPassphraseField"
-                    Click="ButtonClearSshKeyPassphraseField_OnClick">
-                    Clear
-                </Button>
+                    Content="Implicit"
+                    Margin="16 0 0 0" />
 
             </Grid>
 

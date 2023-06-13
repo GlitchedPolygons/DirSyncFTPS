@@ -1,5 +1,5 @@
-﻿/*
-    DirSyncSFTP
+/*
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -16,26 +16,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-using System;
-using System.Threading.Tasks;
+using System.Windows;
 
-namespace DirSyncSFTP;
-
-public partial class MainWindow
-{
-    private void TrayContextMenu_OnClickedQuit(object? sender, EventArgs e)
-    {
-        Quit();
-        Environment.Exit(0);
-    }
-
-    private void TrayContextMenu_OnClickedForceSyncNow(object? sender, EventArgs e)
-    {
-        Task.Run(PerformSync);
-    }
-
-    private void TrayContextMenu_OnClickedOpen(object? sender, EventArgs e)
-    {
-        Open();
-    }
-}
+[assembly: ThemeInfo(
+    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
+                                     //(used if a resource is not found in the page,
+                                     // or application resource dictionaries)
+    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
+                                              //(used if a resource is not found in the page,
+                                              // app, or any theme specific resource dictionaries)
+)]

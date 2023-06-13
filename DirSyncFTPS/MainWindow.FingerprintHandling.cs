@@ -1,5 +1,5 @@
 ﻿/*
-    DirSyncSFTP
+    DirSyncFTPS
     Copyright (C) 2023  Raphael Beck
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GlitchedPolygons.ExtensionMethods;
 
-namespace DirSyncSFTP;
+namespace DirSyncFTPS;
 
 public partial class MainWindow
 {
@@ -58,7 +58,7 @@ public partial class MainWindow
 
         if (stderr.NotNullNotEmpty())
         {
-            AppendLineToConsoleOutputTextBox($"ERROR: Failed to fetch host key fingerprint for \"{hostName}:{portNumber}\". {stderr}");
+            AppendLineToConsoleOutputTextBox($"ERROR: Failed to fetch host TLS certificate fingerprint for \"{hostName}:{portNumber}\". {stderr}");
         }
 
         return stdout.NotNullNotEmpty()
@@ -81,10 +81,10 @@ public partial class MainWindow
             ExecuteOnUIThread(() =>
             {
                 if (MessageBox.Show(
-                        $"The host \"{host}:{port}\" reported the following public key fingerprint:\n\n{fingerprint}\n\nDuring setup of the associated synchronized directory entry, you accepted the following as the trusted host key fingerprint:\n\n{storedFingerprint}\n\nThese two are different! This could either be due to the host having changed keys, or a man-in-the-middle attack (hopefully not!).\n\nHow should this be handled?\n\nClicking on \"Yes\" will accept the new host key fingerprint and overwrite the currently stored one; \"No\" will reject the key returned by the server and keep everything as it was (connection won't happen in this case).",
+                        $"The host \"{host}:{port}\" reported the following TLS certificate fingerprint:\n\n{fingerprint}\n\nDuring setup of the associated synchronized directory entry, you accepted the following as the trusted host TLS certificate fingerprint:\n\n{storedFingerprint}\n\nThese two are different! This could either be due to the host having changed/renewed certificates, or a man-in-the-middle attack (hopefully not!).\n\nHow should this be handled?\n\nClicking on \"Yes\" will accept the new host certificate fingerprint and overwrite the currently stored one; \"No\" will reject the fingerprint returned by the server and keep everything as it was (connection won't happen in this case).",
                         $"Fingerprint mismatch for \"{host}:{port}\"", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                 {
-                    AppendLineToConsoleOutputTextBox($"User rejected host \"{host}:{port}\"'s alleged public key fingerprint \"{fingerprint}\" - associated directory entries won't sync.");
+                    AppendLineToConsoleOutputTextBox($"User rejected host \"{host}:{port}\"'s alleged TLS certificate fingerprint \"{fingerprint}\" - associated directory entries won't sync.");
                     return;
                 }
 
@@ -99,9 +99,9 @@ public partial class MainWindow
         {
             ExecuteOnUIThread(() =>
             {
-                if (MessageBox.Show($"The host \"{host}:{port}\" reported the following public key fingerprint:\n\n{fingerprint}\n\nIs this correct? Do you trust it?", "Host key fingerprint check", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                if (MessageBox.Show($"The host \"{host}:{port}\" reported the following TLS certificate fingerprint:\n\n{fingerprint}\n\nIs this correct? Do you trust it?", "Host certificate fingerprint check", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                 {
-                    AppendLineToConsoleOutputTextBox($"User rejected host \"{host}:{port}\"'s alleged public key fingerprint \"{fingerprint}\" - associated directory entries won't sync.");
+                    AppendLineToConsoleOutputTextBox($"User rejected host \"{host}:{port}\"'s alleged TLS certificate fingerprint \"{fingerprint}\" - associated directory entries won't sync.");
                     return;
                 }
 
