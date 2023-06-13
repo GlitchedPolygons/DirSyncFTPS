@@ -12,7 +12,7 @@ Makes use of [WinSCP](https://github.com/winscp/winscp) and its PowerShell inter
 
 ---
 
-![Screenshot](https://api.files.glitchedpolygons.com/api/v1/files/dirsyncsftp-screenshot.png)
+![Screenshot](https://api.files.glitchedpolygons.com/api/v1/files/dirsyncftps-screenshot.png)
 
 ---
 
