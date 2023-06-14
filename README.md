@@ -2,6 +2,8 @@
 
 ## Convert a folder on your Windows system into a dropbox. Kinda.
 
+### _Forked from https://github.com/GlitchedPolygons/DirSyncSFTP_
+
 Windows Explorer integration for FTPS directories. Raw and simple. GPL-3.0 license. Enjoy.
 
 This is a WPF application that can run in the background and synchronize one or more directories on your system with a remote FTPS server's directory.
